@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
 import { blob } from "stream/consumers"
 import TextOutput from "../../Components/TextReader"
+import axios from "axios"
 
 export default function HomePage(){
     const [src,setSrc]=useState('')
     const [files,setFiles]=useState([''])
     const [data,setData]=useState('')
    useEffect(()=>{
-  
+    
    },[data])
 return(
     <div>
@@ -18,10 +19,11 @@ return(
             e.preventDefault()
             
             }}>
-        <input type="file" accept="text/plain" multiple={true} onChange={(e)=>{
+        <input type="file"  multiple={true} onChange={(e)=>{
             const file=new FileReader()
            
             const files=e.target.files
+            let filename=files![0].name
             try{
             file.readAsArrayBuffer(files![0])}
             catch(e){
@@ -41,11 +43,10 @@ return(
 
                 const totalChunks=arrayBuffer.byteLength/chunkSize
                 
-                for(let i=0;i<totalChunks;i++){
-                   let Chunk=arrayBuffer.slice(i*chunkSize,i+1*chunkSize)
-                   const view=new Int8Array(Chunk)
-                   console.log(view)
-                }
+                
+                   console.log('senidng')
+                   axios.post(' http://localhost:3333/file?name='+filename,arrayBuffer,{headers:{'a':'a','Content-Type':'application/octet-stream'}}).then((a)=>console.log(a.data))
+                
               
 
             }
